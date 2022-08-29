@@ -115,7 +115,8 @@ export const Main = () => {
             loader={<h4>Loading... </h4>}
           >
             {posts.map(post => (
-              <PostCard 
+              <PostCard
+                id={post.id}
                 title={post.title} 
                 author={post.username} 
                 created_datetime={post.created_datetime}
