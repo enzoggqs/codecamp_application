@@ -4,9 +4,9 @@ import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
 import { useDisclosure } from '@chakra-ui/hooks'
 import { Button } from '@chakra-ui/button'
-import CustomModal from '../CustomModal'
 import { Input } from '@chakra-ui/input'
 import { Textarea } from '@chakra-ui/textarea'
+import axios from 'axios'
 
 export const Header = ({id, title}) => {
   const [newTitle, setNewTitle] = useState('');
@@ -24,9 +24,22 @@ export const Header = ({id, title}) => {
     setNewTitle(inputValue)
   }
 
-  // function editPost (id, newContent) {
-    
-  // }
+  async function handleDeletePost (thisId) {
+    await axios.delete(`https://dev.codeleap.co.uk/careers/${thisId}/`);
+    deletePost.onClose();
+  }
+
+  async function handleEditPost (thisId, thisTitle, thisContent) {
+    await axios
+      .patch(`https://dev.codeleap.co.uk/careers/${thisId}/`, {
+          title: thisTitle,
+          content: thisContent
+      }, {
+          headers: { 'Content-type': 'application/json; charset=UTF-8' }
+      });
+
+    editPost.onClose();
+  }
 
   const renderCustomModels = () => (
     <>
@@ -61,7 +74,7 @@ export const Header = ({id, title}) => {
             <Button 
               borderRadius='0px'
               mr={3} 
-              onClick={editPost.onClose} 
+              onClick={() => handleEditPost(id, newTitle, newContent)} 
               fontSize='16px' 
               fontWeight='700' 
               bgColor='black' 
@@ -103,7 +116,7 @@ export const Header = ({id, title}) => {
             <Button 
               borderRadius='0px'
               mr={3} 
-              onClick={deletePost.onClose} 
+              onClick={() => handleDeletePost(id)} 
               fontSize='13px' 
               fontWeight='700' 
               bgColor='white' 
