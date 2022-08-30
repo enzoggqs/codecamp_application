@@ -17,7 +17,7 @@ export const SignUp = () => {
       alert('Please enter a username')
     } else {
       dispatch(login(user))
-      navigate("/")
+      navigate("/home")
     }
   }
 
