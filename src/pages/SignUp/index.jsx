@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Box, Text, Input, Button} from '@chakra-ui/react'
 import { login } from '../../store/Authorization.store' 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 

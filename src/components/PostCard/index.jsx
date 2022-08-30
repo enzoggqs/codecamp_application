@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from '@chakra-ui/layout'
-import React, { useState } from 'react'
+import React from 'react'
 import { Header } from '../Header'
 import moment from 'moment';
 
