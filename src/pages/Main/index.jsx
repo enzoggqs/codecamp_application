@@ -4,12 +4,20 @@ import { Header } from '../../components/Header'
 import axios from 'axios'
 import { PostCard } from '../../components/PostCard'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 export const Main = () => {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [fetchData, setFetchData] = useState();
   const [posts, setPosts] = useState([]);
+  const currentUser = useSelector((state) => state.currentUser)
+  const navigate = useNavigate();
+
+  if(currentUser.isLogged === false){
+    navigate('/login')
+  }
 
   const getData = async () => {
     const { data } = await axios.get(`https://dev.codeleap.co.uk/careers/`);
@@ -35,6 +43,26 @@ export const Main = () => {
   let handleTitleChange = (e) => {
     let inputValue = e.target.value
     setTitle(inputValue)
+  }
+
+  async function createPost () {
+    if(title !== '' || content !== ''){
+      await axios
+        .post(`https://dev.codeleap.co.uk/careers/`, {
+            username: currentUser.username,
+            title: title,
+            content: content
+        }, {
+            headers: { 'Content-type': 'application/json; charset=UTF-8' }
+        });
+
+        const { data } = await axios.get(`https://dev.codeleap.co.uk/careers/`);
+        setFetchData(data);
+        setPosts(data.results);
+    } else {
+      alert('Please fill in all fields')
+    }
+    // deletePost.onClose();
   }
 
   return (
@@ -103,7 +131,8 @@ export const Main = () => {
               height='33px' 
               fontSize='16px' 
               borderRadius='0px' 
-              fontWeight={'700'} 
+              fontWeight={'700'}
+              onClick={() => createPost()}
             >
               Create
             </Button>
@@ -116,6 +145,7 @@ export const Main = () => {
           >
             {posts.map(post => (
               <PostCard
+                key={post.id}
                 id={post.id}
                 title={post.title} 
                 author={post.username} 

@@ -1,9 +1,25 @@
 import React, { useState } from 'react'
 import { Box, Text, Input, Button} from '@chakra-ui/react'
+import { login } from '../../store/Authorization.store' 
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 
 export const SignUp = () => {
   const [user, setUser] = useState('');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleChange = (event) => setUser(event.target.value);
+
+  function handleLogin(){
+    if(user === ''){
+      alert('Please enter a username')
+    } else {
+      dispatch(login(user))
+      navigate("/")
+    }
+  }
 
   return (
     <Box 
@@ -62,6 +78,8 @@ export const SignUp = () => {
           borderRadius='0px'  
           fontWeight={'700'} 
           h='30px'
+          disabled={user === ''}
+          onClick={() => handleLogin()}
         >
           Enter
         </Button>
