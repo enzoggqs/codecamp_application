@@ -7,7 +7,10 @@ import { Button } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
 import { Textarea } from '@chakra-ui/textarea'
 import axios from 'axios'
+import { logout } from '../../store/Authorization.store' 
 import { PostsContext } from '../../postsContext'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 export const Header = ({id, title}) => {
   const [posts, setPosts] = useContext(PostsContext);
@@ -16,7 +19,8 @@ export const Header = ({id, title}) => {
   const editPost = useDisclosure();
   const deletePost = useDisclosure();
 
-  console.log(posts);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   let handleContentChange = (e) => {
     let inputValue = e.target.value
@@ -49,6 +53,11 @@ export const Header = ({id, title}) => {
     postsAux[postToChange].content = thisContent;
     setPosts(postsAux);
     editPost.onClose();
+  }
+
+  function handleLogout(){
+    dispatch(logout)
+    navigate("/login")
   }
 
   const renderCustomModels = () => (
@@ -163,7 +172,10 @@ export const Header = ({id, title}) => {
           </div>
         </Flex>
         :
-        <Text fontSize={'22px'} fontWeight='700'>CodeLeap Network</Text>
+        <Flex w='100%' justifyContent='space-between'>
+          <Text fontSize={'22px'} fontWeight='700'>CodeLeap Network</Text>
+          <Button onClick={() => handleLogout()} bgColor='red' color={'white'}>Logout</Button>
+        </Flex>
       }
     </Box>
   )
