@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Box, Button, Input, Text, Textarea } from '@chakra-ui/react'
 import { Header } from '../../components/Header'
 import axios from 'axios'
@@ -6,12 +6,13 @@ import { PostCard } from '../../components/PostCard'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import {PostsContext} from "../../postsContext"
 
 export const Main = () => {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [fetchData, setFetchData] = useState();
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useContext(PostsContext);
   const currentUser = useSelector((state) => state.currentUser)
   const navigate = useNavigate();
 

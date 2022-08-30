@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from '@chakra-ui/layout'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
 import { useDisclosure } from '@chakra-ui/hooks'
@@ -7,12 +7,16 @@ import { Button } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
 import { Textarea } from '@chakra-ui/textarea'
 import axios from 'axios'
+import { PostsContext } from '../../postsContext'
 
 export const Header = ({id, title}) => {
+  const [posts, setPosts] = useContext(PostsContext);
   const [newTitle, setNewTitle] = useState('');
   const [newContent, setNewContent] = useState('');
   const editPost = useDisclosure();
   const deletePost = useDisclosure();
+
+  console.log(posts);
 
   let handleContentChange = (e) => {
     let inputValue = e.target.value
@@ -26,6 +30,7 @@ export const Header = ({id, title}) => {
 
   async function handleDeletePost (thisId) {
     await axios.delete(`https://dev.codeleap.co.uk/careers/${thisId}/`);
+    setPosts(posts.filter(post => post.id !== thisId));
     deletePost.onClose();
   }
 
@@ -38,6 +43,11 @@ export const Header = ({id, title}) => {
           headers: { 'Content-type': 'application/json; charset=UTF-8' }
       });
 
+    const postsAux = [...posts];
+    const postToChange = posts.findIndex(p => p.id === thisId);
+    postsAux[postToChange].title = thisTitle;
+    postsAux[postToChange].content = thisContent;
+    setPosts(postsAux);
     editPost.onClose();
   }
 
