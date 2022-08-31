@@ -27,7 +27,8 @@ export const Main = () => {
   };
 
   const fetchNewData = async () => {
-    const { data } = await axios.get(fetchData.next);
+    const httpsNextData = fetchData.next.substring(0, 4) + "s" + fetchData.next.substring(4, fetchData.next.length)
+    const { data } = await axios.get(httpsNextData);
     setFetchData(data);
     setPosts(current => [...current, ...data.results]);
   }
